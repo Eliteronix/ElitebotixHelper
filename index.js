@@ -43,4 +43,5 @@ function readyDiscord() {
 	});
 
 	// Keeping track of reminders
+
 }
