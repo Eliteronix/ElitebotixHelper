@@ -25,6 +25,9 @@ const client = new Discord.Client({
 	]
 });
 
+//Get messageCreate
+const messageCreate = require('./messageCreate');
+
 //Get reactionAdded
 const reactionAdded = require('./reactionAdded');
 
@@ -98,6 +101,8 @@ async function readyDiscord() {
 client.on('messageReactionAdd', (reaction, user) => {
 	reactionAdded(reaction, user, client);
 });
+
+client.on('messageCreate', messageCreate);
 
 async function checkReminders() {
 	// Get the due reminders
