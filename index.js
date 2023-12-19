@@ -122,7 +122,7 @@ async function checkReminders() {
 		}
 
 		// Send the reminder
-		reminderChannel.send(`${config.reminderMessage.replace('${user}', dueReminders[i].id)}`);
+		reminderChannel.send(`${config.reminderMessage.replace('${user}', client.reminderUsers[i].id)}`);
 
 		// Set the user's next reminder
 		let nextReminder = new Date();
