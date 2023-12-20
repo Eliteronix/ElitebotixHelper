@@ -128,7 +128,7 @@ async function checkReminders() {
 		let nextReminder = new Date();
 		nextReminder.setUTCHours(nextReminder.getUTCHours() + config.repeatAfterHours);
 
-		client.reminderUsers[i] = { id: client.reminderUsers[i], nextReminder: nextReminder };
+		client.reminderUsers[i] = { id: client.reminderUsers[i].id, nextReminder: nextReminder };
 
 		// Get the most recent messages sent by the bot that includes an embed
 		const reminderEmbedMessageCollection = await reminderChannel.messages.fetch({ limit: 100 })
