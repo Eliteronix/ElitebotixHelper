@@ -28,7 +28,7 @@ module.exports = async function (reaction, user, client) {
 		let nextReminder = new Date();
 		nextReminder.setUTCHours(nextReminder.getUTCHours() + config.remindAfterHours);
 
-		client.reminderUsers[i] = { id: client.reminderUsers[i], nextReminder: nextReminder };
+		client.reminderUsers[i] = { id: client.reminderUsers[i].id, nextReminder: nextReminder };
 	}
 
 	// Send the success message
