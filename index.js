@@ -17,6 +17,9 @@ const client = new Discord.Client({
 		Discord.GatewayIntentBits.GuildMessageReactions,
 		Discord.GatewayIntentBits.DirectMessages,
 		Discord.GatewayIntentBits.DirectMessageReactions,
+		Discord.GatewayIntentBits.Guilds,
+		Discord.GatewayIntentBits.GuildMembers,
+		Discord.GatewayIntentBits.GuildVoiceStates,
 	],
 	partials: [
 		Discord.Partials.Message,
@@ -30,6 +33,9 @@ const messageCreate = require('./messageCreate');
 
 //Get reactionAdded
 const reactionAdded = require('./reactionAdded');
+
+//Get voiceStateUpdate
+const voiceStateUpdate = require('./voiceStateUpdate');
 
 //login with the Discord client using the Token from the .env file
 // eslint-disable-next-line no-undef
@@ -103,6 +109,8 @@ client.on('messageReactionAdd', (reaction, user) => {
 });
 
 client.on('messageCreate', messageCreate);
+
+client.on('voiceStateUpdate', voiceStateUpdate);
 
 async function checkReminders() {
 	// Get the due reminders
