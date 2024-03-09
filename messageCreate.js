@@ -11,7 +11,9 @@ module.exports = async function (msg) {
 			try {
 				await msg.crosspost();
 			} catch (error) {
-				console.error(error);
+				if (error.message !== 'This message has already been crossposted.') {
+					console.error(error);
+				}
 			}
 		}
 	}
