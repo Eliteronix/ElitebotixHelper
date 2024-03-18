@@ -13,6 +13,7 @@ const config = require('./config.json');
 //create a Discord client with discord.js
 const client = new Discord.Client({
 	intents: [
+		Discord.GatewayIntentBits.MessageContent,
 		Discord.GatewayIntentBits.GuildMessages,
 		Discord.GatewayIntentBits.GuildMessageReactions,
 		Discord.GatewayIntentBits.DirectMessages,
