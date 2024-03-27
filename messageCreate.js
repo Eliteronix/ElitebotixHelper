@@ -26,9 +26,32 @@ module.exports = async function (msg) {
 			userMessage.channels = [...new Set([...userMessage.channels, msg.channel.id])];
 
 			if (userMessage.channels.length > 2) {
-				// Message Eliteronix to notify about spam
-				const user = await msg.client.users.fetch('138273136285057025');
-				user.send(`User <@${msg.author.id}> is spamming in channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
+				// [Eliteronix, Terces]
+				let userIdsToNotify = ['138273136285057025', '458196977939906562'];
+
+				let usersToNotify = [];
+
+				for (let userId of userIdsToNotify) {
+					let user = await msg.client.users.fetch(userId);
+					usersToNotify.push(user);
+				}
+
+				// Ban the user and delete messages for the last hour
+				msg.member.ban({ deleteMessageSeconds: 60 * 60, reason: 'Spamming' })
+					.then(() => {
+						// Notify the users
+						for (let user of usersToNotify) {
+							user.send(`User <@${msg.author.id}> got banned for spamming \`${msg.content}\` in these channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
+						}
+					})
+					.catch((error) => {
+						// Notify the users
+						for (let user of usersToNotify) {
+							user.send(`**FAILED TO BAN** user <@${msg.author.id}> for spamming \`${msg.content}\` in these channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
+						}
+
+						console.error('Failed to ban', error);
+					});
 			}
 		} else {
 			userMessages.push({
