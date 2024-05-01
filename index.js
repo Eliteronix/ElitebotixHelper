@@ -29,14 +29,10 @@ const client = new Discord.Client({
 	]
 });
 
-//Get messageCreate
 const messageCreate = require('./messageCreate');
-
-//Get reactionAdded
 const reactionAdded = require('./reactionAdded');
-
-//Get voiceStateUpdate
 const voiceStateUpdate = require('./voiceStateUpdate');
+const interactionCreate = require('./interactionCreate');
 
 //login with the Discord client using the Token from the .env file
 // eslint-disable-next-line no-undef
@@ -60,6 +56,52 @@ async function readyDiscord() {
 			// type: 'PLAYING' //PLAYING: WATCHING: LISTENING: STREAMING:
 		}]
 	});
+
+	const { REST, Routes } = require('discord.js');
+	const fs = require('node:fs');
+
+	const commands = [];
+	// Grab all the command files from the commands directory you created earlier
+	const commandFiles = fs.readdirSync('./commands');
+
+	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+	for (const file of commandFiles) {
+		if (!file.endsWith('.js')) {
+			continue;
+		}
+
+		const command = require(`./commands/${file}`);
+
+		if (command.tags !== 'debug' && command.data || command.name === 'admin') {
+			commands.push(command.data.toJSON());
+		}
+	}
+
+	// eslint-disable-next-line no-undef
+	const rest = new REST({ version: '10' }).setToken(process.env.BOTTOKEN);
+
+	(async () => {
+		let notDone = true;
+		while (notDone) {
+			try {
+				// eslint-disable-next-line no-console
+				console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+				const data = await rest.put(
+					Routes.applicationCommands(client.user.id),
+					{ body: commands },
+				);
+
+				// eslint-disable-next-line no-console
+				console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+
+				client.slashCommandData = data;
+				notDone = false;
+			} catch (error) {
+				console.error('bot.js | Set application commands' + error);
+			}
+		}
+	})();
 
 	// Get the channel to send reminders to
 	const reminderChannel = await client.channels.fetch(config.reminderChannel);
@@ -103,6 +145,7 @@ async function readyDiscord() {
 	}
 
 	checkReminders();
+	updateElitebotixTopics();
 }
 
 client.on('messageReactionAdd', (reaction, user) => {
@@ -112,6 +155,8 @@ client.on('messageReactionAdd', (reaction, user) => {
 client.on('messageCreate', messageCreate);
 
 client.on('voiceStateUpdate', voiceStateUpdate);
+
+client.on('interactionCreate', interactionCreate);
 
 async function checkReminders() {
 	// Get the due reminders
@@ -160,4 +205,35 @@ async function checkReminders() {
 	embedMessage.react('✅');
 
 	setTimeout(checkReminders, 1000 * 60);
+}
+
+async function updateElitebotixTopics() {
+	// Fetch the elitebotix topics channel
+	const elitebotixTopicsChannel = await client.channels.fetch('1019637990844284959');
+
+	// Fetch all the threads in the channel
+	await elitebotixTopicsChannel.threads.fetchArchived({ limit: 100 });
+
+	let doneTagId = elitebotixTopicsChannel.availableTags.find(t => t.name === 'Done').id;
+
+	// Filter out the threads that have the "Done" Tag applied
+	let openTopics = elitebotixTopicsChannel.threads.cache.filter(t => !t.appliedTags.includes(doneTagId));
+
+	// Apply the "Open" Tag to the threads that don't have the "Done" Tag
+
+	// Get the "Open" Tag ID
+	let openTagId = elitebotixTopicsChannel.availableTags.find(t => t.name === 'Open').id;
+
+	// Apply the "Open" Tag to the threads that don't have the "Done" Tag
+	openTopics.forEach(async thread => {
+		if (thread.archived) {
+			await thread.setArchived(false);
+		}
+
+		if (!thread.appliedTags.includes(openTagId)) {
+			await thread.setAppliedTags([openTagId, ...thread.appliedTags]);
+		}
+	});
+
+	setTimeout(updateElitebotixTopics, 1000 * 60);
 }
