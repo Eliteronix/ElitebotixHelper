@@ -1,4 +1,5 @@
 let userMessages = [];
+const { dadMode, saveMe } = require('./config.json');
 
 module.exports = async function (msg) {
 	if (msg.guildId === '727407178499096597') {
@@ -16,6 +17,35 @@ module.exports = async function (msg) {
 	}
 
 	if (msg.author.bot) return;
+
+	if (dadMode) {
+		let message = msg.content.toLowerCase().replace('\'', '');
+		if (message.startsWith('im ') || message.startsWith('i am ')) {
+			message = message.replace('im ', '').replace('i am ', '');
+
+			await msg.channel.send({ allowedMentions: {}, content: `Hi ${message}, I'm dad!` });
+		}
+	}
+
+	if (saveMe) {
+		let lyrics = [
+			'I\'m trapped in a vile world',
+			'Where the end game\'s all the same as every other',
+			'We\'re only here to die',
+		];
+
+		if (msg.content === 'save me') {
+			for (let lyric of lyrics) {
+				await msg.channel.send({ content: lyric });
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+			}
+		} else if (msg.content === 'SAVE ME') {
+			for (let lyric of lyrics) {
+				await msg.channel.send({ content: lyric.toUpperCase() });
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+			}
+		}
+	}
 
 	if (msg.guildId === '727407178499096597') {
 		// userMessages are checked to find out if a user is spamming
