@@ -72,7 +72,14 @@ async function readyDiscord() {
 
 		const command = require(`./commands/${file}`);
 
-		if (command.tags !== 'debug' && command.data || command.name === 'admin') {
+		if (command.name === 'premier-poll') {
+			let commandJson = command.data.toJSON();
+			commandJson.integration_types = 1;
+
+			console.log(commandJson);
+
+			commands.push(commandJson);
+		} else {
 			commands.push(command.data.toJSON());
 		}
 	}
