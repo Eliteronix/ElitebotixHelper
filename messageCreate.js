@@ -66,22 +66,26 @@ module.exports = async function (msg) {
 					usersToNotify.push(user);
 				}
 
-				// Ban the user and delete messages for the last hour
-				msg.member.ban({ deleteMessageSeconds: 60 * 60, reason: 'Spamming' })
-					.then(() => {
-						// Notify the users
-						for (let user of usersToNotify) {
-							user.send(`User <@${msg.author.id}> got banned for spamming \`${msg.content}\` in these channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
-						}
-					})
-					.catch((error) => {
-						// Notify the users
-						for (let user of usersToNotify) {
-							user.send(`**FAILED TO BAN** user <@${msg.author.id}> for spamming \`${msg.content}\` in these channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
-						}
+				try {
+					// Ban the user and delete messages for the last hour
+					msg.member.ban({ deleteMessageSeconds: 60 * 60, reason: 'Spamming' })
+						.then(() => {
+							// Notify the users
+							for (let user of usersToNotify) {
+								user.send(`User <@${msg.author.id}> got banned for spamming \`${msg.content}\` in these channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
+							}
+						})
+						.catch((error) => {
+							// Notify the users
+							for (let user of usersToNotify) {
+								user.send(`**FAILED TO BAN** user <@${msg.author.id}> for spamming \`${msg.content}\` in these channels: ${userMessage.channels.map((channel) => `<#${channel}>`).join(', ')}`);
+							}
 
-						console.error('Failed to ban', error);
-					});
+							console.error('Failed to ban', error);
+						});
+				} catch (error) {
+					console.error('Failed to ban', error);
+				}
 			}
 		} else {
 			userMessages.push({
