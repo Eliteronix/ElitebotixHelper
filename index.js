@@ -74,7 +74,7 @@ async function readyDiscord() {
 
 		if (command.name === 'premier-poll') {
 			let commandJson = command.data.toJSON();
-			commandJson.integration_types = 1;
+			commandJson.integration_types = [1];
 
 			console.log(commandJson);
 
