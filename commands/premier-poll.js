@@ -23,8 +23,6 @@ module.exports = {
 					{ name: 'Sunset', value: 'Sunset' },
 				)),
 	async execute(interaction) {
-		await interaction.deferReply();
-
 		const map = interaction.options.getString('map');
 
 		const poll = {
@@ -40,12 +38,51 @@ module.exports = {
 			allow_multiselect: true,
 			layout_type: 1,
 		};
+		const url = new URL(
+			`https://discord.com/api/v10/interactions/${interaction.id}/${interaction.token}/callback`
+		);
 
-		let response = await interaction.editReply({ poll: poll });
+		const headers = {
+			'Accept': 'application/json',
+			'Content-Type': 'application/x-www-form-urlencoded',
+		};
 
-		// Pin the poll
-		await interaction.channel.messages.fetch(response.id)
-			.then(message => message.pin())
-			.catch(console.error);
+		await fetch(url, {
+			method: 'POST',
+			headers,
+			body: JSON.stringify({ poll: poll }),
+		}).then(async (response) => {
+			let json = await response.json();
+
+			console.log(json);
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// let response = await interaction.editReply({ poll: poll });
+
+		// // Pin the poll
+		// await interaction.channel.messages.fetch(response.id)
+		// 	.then(message => message.pin())
+		// 	.catch(console.error);
 	},
 };
