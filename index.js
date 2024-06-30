@@ -77,8 +77,6 @@ async function readyDiscord() {
 			commandJson.integration_types = [1];
 			commandJson.contexts = [2];
 
-			console.log(commandJson);
-
 			commands.push(commandJson);
 		} else {
 			commands.push(command.data.toJSON());
