@@ -26,13 +26,40 @@ module.exports = {
 		const map = interaction.options.getString('map');
 
 		const poll = {
-			question: `When can you play? | ${map}`,
+			question: {
+				text: `When can you play? | ${map}`
+			},
 			answers: [
-				'(Scrim) Wednesday 7PM',
-				'(Match) Thursday 7PM',
-				'(Scrim) Friday 8PM',
-				'(Match) Saturday 8PM',
-				'(Match) Sunday 7PM',
+				{
+					answer_id: 1,
+					poll_media: {
+						text: '(Scrim) Wednesday 7PM'
+					}
+				},
+				{
+					answer_id: 2,
+					poll_media: {
+						text: '(Match) Thursday 7PM'
+					}
+				},
+				{
+					answer_id: 3,
+					poll_media: {
+						text: '(Scrim) Friday 8PM'
+					}
+				},
+				{
+					answer_id: 4,
+					poll_media: {
+						text: '(Match) Saturday 8PM'
+					}
+				},
+				{
+					answer_id: 5,
+					poll_media: {
+						text: '(Match) Sunday 7PM'
+					}
+				},
 			],
 			duration: 192, // 8 days
 			allow_multiselect: true,
@@ -44,45 +71,18 @@ module.exports = {
 
 		const headers = {
 			'Accept': 'application/json',
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': 'application/json'
 		};
 
 		await fetch(url, {
 			method: 'POST',
 			headers,
-			body: JSON.stringify({ poll: poll }),
-		}).then(async (response) => {
-			let json = await response.json();
-
-			console.log(json);
+			body: JSON.stringify({
+				'type': 4,
+				'data': {
+					poll: poll
+				}
+			}),
 		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// let response = await interaction.editReply({ poll: poll });
-
-		// // Pin the poll
-		// await interaction.channel.messages.fetch(response.id)
-		// 	.then(message => message.pin())
-		// 	.catch(console.error);
 	},
 };
