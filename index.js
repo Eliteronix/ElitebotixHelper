@@ -30,7 +30,6 @@ const client = new Discord.Client({
 });
 
 const messageCreate = require('./messageCreate');
-const reactionAdded = require('./reactionAdded');
 const voiceStateUpdate = require('./voiceStateUpdate');
 const interactionCreate = require('./interactionCreate');
 
@@ -110,10 +109,6 @@ async function readyDiscord() {
 	})();
 	updateElitebotixTopics();
 }
-
-client.on('messageReactionAdd', (reaction, user) => {
-	reactionAdded(reaction, user, client);
-});
 
 client.on('messageCreate', messageCreate);
 
