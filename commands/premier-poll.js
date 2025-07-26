@@ -15,6 +15,7 @@ module.exports = {
 					{ name: 'Ascent', value: 'Ascent' },
 					{ name: 'Bind', value: 'Bind' },
 					{ name: 'Breeze', value: 'Breeze' },
+					{ name: 'Corrode', value: 'Corrode' },
 					{ name: 'Fracture', value: 'Fracture' },
 					{ name: 'Haven', value: 'Haven' },
 					{ name: 'Icebox', value: 'Icebox' },
@@ -27,7 +28,7 @@ module.exports = {
 
 		const poll = {
 			question: {
-				text: `When can you play? | ${map}`
+				text: `When can you play? (GMT+2) | ${map}`
 			},
 			answers: [
 				{
