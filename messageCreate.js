@@ -103,10 +103,16 @@ module.exports = async function (msg) {
 	//Sledding Silly Time!
 	if (msg.guildId === '1501689641580105808') {
 		if (msg.channel.id === '1529624316772094042') {
+			let includesAWord = false;
 			for (let i = 0; i < vulgarWordsList.length; i++) {
-				if (!msg.content.toLowerCase().includes(vulgarWordsList[i])) {
-					await msg.delete();
+				if (msg.content.toLowerCase().includes(vulgarWordsList[i])) {
+					includesAWord = true;
+					break;
 				}
+			}
+
+			if (!includesAWord) {
+				await msg.delete();
 			}
 		}
 	}
