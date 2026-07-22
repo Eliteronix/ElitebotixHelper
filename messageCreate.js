@@ -1,7 +1,8 @@
 let userMessages = [];
-const { dadMode, saveMe } = require('./config.json');
+const { dadMode, saveMe, vulgarWordsList } = require('./config.json');
 
 module.exports = async function (msg) {
+	//Bocatnical Garden
 	if (msg.guildId === '727407178499096597') {
 		await new Promise((resolve) => setTimeout(resolve, 5000));
 
@@ -27,27 +28,29 @@ module.exports = async function (msg) {
 		}
 	}
 
-	if (saveMe) {
-		let lyrics = [
-			'I\'m trapped in a vile world',
-			'Where the end game\'s all the same as every other',
-			'We\'re only here to die',
-		];
+	//Bocatnical Garden
+	if (msg.guildId === '727407178499096597') {
 
-		if (msg.content === 'save me') {
-			for (let lyric of lyrics) {
-				await msg.channel.send({ content: lyric });
-				await new Promise((resolve) => setTimeout(resolve, 2000));
-			}
-		} else if (msg.content === 'SAVE ME') {
-			for (let lyric of lyrics) {
-				await msg.channel.send({ content: lyric.toUpperCase() });
-				await new Promise((resolve) => setTimeout(resolve, 2000));
+		if (saveMe) {
+			let lyrics = [
+				'I\'m trapped in a vile world',
+				'Where the end game\'s all the same as every other',
+				'We\'re only here to die',
+			];
+
+			if (msg.content === 'save me') {
+				for (let lyric of lyrics) {
+					await msg.channel.send({ content: lyric });
+					await new Promise((resolve) => setTimeout(resolve, 2000));
+				}
+			} else if (msg.content === 'SAVE ME') {
+				for (let lyric of lyrics) {
+					await msg.channel.send({ content: lyric.toUpperCase() });
+					await new Promise((resolve) => setTimeout(resolve, 2000));
+				}
 			}
 		}
-	}
 
-	if (msg.guildId === '727407178499096597') {
 		// userMessages are checked to find out if a user is spamming
 		let userMessage = userMessages.find((userMessage) => userMessage.user === msg.author.id && userMessage.message === msg.content);
 
@@ -94,6 +97,17 @@ module.exports = async function (msg) {
 				message: msg.content,
 				channels: [msg.channel.id],
 			});
+		}
+	}
+
+	//Sledding Silly Time!
+	if (msg.guildId === '1501689641580105808') {
+		if (msg.channel.id === '1529624316772094042') {
+			for (let i = 0; i < vulgarWordsList.length; i++) {
+				if (!msg.content.toLowerCase().includes(vulgarWordsList[i])) {
+					await msg.delete();
+				}
+			}
 		}
 	}
 
