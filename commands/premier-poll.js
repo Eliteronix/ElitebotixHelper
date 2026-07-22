@@ -21,6 +21,7 @@ module.exports = {
 					{ name: 'Icebox', value: 'Icebox' },
 					{ name: 'Pearl', value: 'Pearl' },
 					{ name: 'Split', value: 'Split' },
+					{ name: 'Summit', value: 'Summit' },
 					{ name: 'Sunset', value: 'Sunset' },
 				)),
 	async execute(interaction) {
