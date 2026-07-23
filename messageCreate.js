@@ -29,7 +29,7 @@ module.exports = async function (msg) {
 
 			let gotDadedString = '';
 
-			if (getDadedStats) {
+			if (gotDadedStats) {
 				gotDadedStats.count += 1;
 
 				gotDadedString = `*(GOTTEM x${gotDadedStats.count})*`;
