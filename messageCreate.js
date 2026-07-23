@@ -1,6 +1,7 @@
 let userMessages = [];
 const { dadMode, saveMe, vulgarWordsList } = require('./config.json');
 const { gotDaded } = require('./stats.json');
+const fs = require('fs');
 
 module.exports = async function (msg) {
 	//Bocatnical Garden
