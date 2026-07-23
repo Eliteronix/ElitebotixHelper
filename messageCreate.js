@@ -33,7 +33,7 @@ module.exports = async function (msg) {
 			if (gotDadedStats) {
 				gotDadedStats.count += 1;
 
-				gotDadedString = `*(GOTTEM x${gotDadedStats.count})*`;
+				gotDadedString = ` *(GOTTEM x${gotDadedStats.count})*`;
 			} else {
 				gotDaded.push({
 					user: msg.author.id,
@@ -43,7 +43,7 @@ module.exports = async function (msg) {
 
 			fs.writeFileSync('./stats.json', JSON.stringify({ gotDaded }, null, 2));
 
-			await msg.channel.send({ allowedMentions: {}, content: `Hi ${message}, I'm dad!` });
+			await msg.channel.send({ allowedMentions: {}, content: `Hi ${message}, I'm dad! ${gotDadedString}` });
 		}
 	}
 
