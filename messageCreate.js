@@ -1,5 +1,6 @@
 let userMessages = [];
 const { dadMode, saveMe, vulgarWordsList } = require('./config.json');
+const { gotDaded } = require('./stats.json');
 
 module.exports = async function (msg) {
 	//Bocatnical Garden
@@ -23,6 +24,23 @@ module.exports = async function (msg) {
 		let message = msg.content.toLowerCase().replace('\'', '');
 		if (message.startsWith('im ') || message.startsWith('i am ')) {
 			message = message.replace('im ', '').replace('i am ', '');
+
+			let gotDadedStats = gotDaded.find((gotDaded) => gotDaded.user === msg.author.id);
+
+			let gotDadedString = '';
+
+			if (getDadedStats) {
+				gotDadedStats.count += 1;
+
+				gotDadedString = `*(GOTTEM x${gotDadedStats.count})*`;
+			} else {
+				gotDaded.push({
+					user: msg.author.id,
+					count: 1,
+				});
+			}
+
+			fs.writeFileSync('./stats.json', JSON.stringify({ gotDaded }, null, 2));
 
 			await msg.channel.send({ allowedMentions: {}, content: `Hi ${message}, I'm dad!` });
 		}
