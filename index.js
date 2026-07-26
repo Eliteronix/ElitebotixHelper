@@ -107,7 +107,10 @@ async function readyDiscord() {
 			}
 		}
 	})();
-	updateElitebotixTopics();
+
+	if (process.env.environment !== 'dev') {
+		updateElitebotixTopics();
+	}
 }
 
 client.on('messageCreate', messageCreate);
