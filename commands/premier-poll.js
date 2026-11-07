@@ -27,9 +27,16 @@ module.exports = {
 	async execute(interaction) {
 		const map = interaction.options.getString('map');
 
+		const tz = new Intl.DateTimeFormat('en-US', {
+			timeZone: 'Europe/Berlin',
+			timeZoneName: 'short',
+		})
+			.formatToParts(new Date())
+			.find(p => p.type === 'timeZoneName').value;
+
 		const poll = {
 			question: {
-				text: `When can you play? (GMT+2) | ${map}`
+				text: `When can you play? (${tz}) | ${map}`
 			},
 			answers: [
 				{
